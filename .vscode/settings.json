@@ -1,0 +1,5 @@
+{
+  
+  "vetur.experimental.templateInterpolationService": true,
+  "terminal.integrated.rightClickBehavior": "default"
+}
