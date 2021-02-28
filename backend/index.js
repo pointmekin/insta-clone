@@ -119,8 +119,24 @@ app.post("/createPost", (request, response) => {
   })
   request.pipe(busboy)
 })
+
+
+/*
+  endpoint - create post subscription
+*/
+
+app.post("/createSubscription", (request, response) => {
+  response.set("Access-Control-Allow-Origin", "*");
+  db.collection('subscriptions').add(request.query)
+  .then(() => {
+    response.send({
+      message: 'Subscription added!',
+      postData: request.query
+    })
+  })
+})
+
 /* 
   listen 
 */
-
 app.listen(process.env.PORT || 3000);
