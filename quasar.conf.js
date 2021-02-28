@@ -48,7 +48,7 @@ module.exports = function (/* ctx */) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       env: {
-        API: API_PRODUCTION // API_PRODUCTION | API_LOCAL
+        API: API_LOCAL // API_PRODUCTION | API_LOCAL
       },
       // transpile: false,
 
@@ -102,7 +102,7 @@ module.exports = function (/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: ['backInUp', 'backOutDown'],
+    animations: ['backInUp', 'backOutDown', 'fadeIn', 'fadeOut'],
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {

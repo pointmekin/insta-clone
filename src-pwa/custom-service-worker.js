@@ -100,7 +100,26 @@ if (backgroundSyncSupported) {
       });
       event.waitUntil(promiseChain);
     }
-    
   });
-
 }
+
+// events - notifications
+
+self.addEventListener('notificationclick', event => {
+  let notification = event.notification
+  let action  = event.action
+  if (action == 'hello') { 
+    console.log("Hello button was clicked")
+  }
+  else if (action == 'bye') {
+    console.log("Bye was clicked")
+  }
+  else {
+    console.log("Main notification clicked")
+  }
+  notification.close()
+})
+
+self.addEventListener('notificationclose', event => {
+  console.log("notification was closed", event)
+})
