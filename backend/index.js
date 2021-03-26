@@ -33,7 +33,7 @@ const db = admin.firestore();
 let bucket = admin.storage().bucket();
 
 /* 
-  config - webpush
+  config - webpush hihihi
 */
 
 webpush.setVapidDetails(
