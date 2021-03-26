@@ -215,9 +215,13 @@ export default {
 
     },
     locationError() {
+      let locationErrorMessage = 'Could not find your location'
+      if (this.$q.platform.is.mac) {
+        locationErrorMessage += 'You might be able to fix this in System Preferences > Security & Privacy > Location Services'
+      }
       this.$q.dialog({
         title: 'Alert',
-        message: 'Could not find your location'
+        message: locationErrorMessage
       })
     },
     addPost() {
@@ -240,6 +244,11 @@ export default {
           ]
         })
         this.$q.loading.hide()
+        if(this.$q.platform.is.safari) {
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 1000)
+        }
       })
       .catch((error) => {
         if(!navigator.onLine && this.backgroundSyncSupported) {

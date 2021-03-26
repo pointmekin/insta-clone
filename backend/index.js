@@ -10,6 +10,7 @@ let  path = require('path')
 let os = require('os')
 let fs = require('fs')
 let UUID = require('uuid-v4')
+let webpush = require('web-push')
 /*
   config - express 
 */
@@ -30,6 +31,16 @@ admin.initializeApp({
 
 const db = admin.firestore();
 let bucket = admin.storage().bucket();
+
+/* 
+  config - webpush
+*/
+
+webpush.setVapidDetails(
+  'mailto:pointmekin@gmail.com',
+  'BAkRmEKQDos_BNQfHfBuynJAwIFiNZVRLNGPb8_2ykEikEHfEtOHgoax4R82-0lSzM7Ekcz1Kk92dHLetmGj08I',
+  'TxOpYH_I_bCA2fswKOF6Sb6DnZlxp6UX_nuncAx3S_4'
+);
 
 /*
   endpoint - posts
@@ -113,9 +124,43 @@ app.post("/createPost", (request, response) => {
         date: parseInt(fields.date),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${ bucket.name }/o/${ uploadedFile.name }?alt=media&token=${ uuid }`
       }).then(() => {
+        sendPushNotification()
         response.send('Post added: ' + fields.id)
       })
     }
+
+    function sendPushNotification() {
+
+      let subscriptions = [];
+      db.collection("subscriptions")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            subscriptions.push(doc.data());
+          });
+          return subscriptions
+        }).then(subscriptions => {
+          subscriptions.forEach(subscription => {
+            //if (subscription.endpoint.startsWith('https://fcm.googleapis.com'))
+            const pushSubscription = {
+              endpoint: subscription.endpoint,
+              keys: {
+                auth: subscription.keys.auth,
+                p256dh: subscription.keys.p256dh
+              }
+            };
+            let pushContent = {
+              title: 'New Quasagram Post!',
+              body: 'New Post Added! Check it out!',
+              openUrl: '/#/'
+            }
+            let pushContentStringified = JSON.stringify(pushContent)
+            webpush.sendNotification(pushSubscription, pushContentStringified);
+          })
+        }) 
+
+    }
+
   })
   request.pipe(busboy)
 })
