@@ -9,7 +9,7 @@
           to="/camera"
           class="large-screen-only q-mr-sm"
           icon="eva-camera-outline"
-          size="18px"
+          size="20x"
           flat
           round
           dense
